@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "corgisim_gui"
+version = "0.0.1"
+description = "Desktop GUI wrapper around corgisim: image lab, sequence builder, setup view, simulation console"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "BSD-3-Clause"}
+authors = [{name = "Max Millar-Blanchaer"}]
+dependencies = [
+    "PySide6>=6.6",
+    "qtpy>=2.4",
+    "jinja2>=3.1",
+    "astropy",
+    "numpy",
+    "scipy",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-qt"]
+
+[project.scripts]
+corgisim-gui = "corgisim_gui.app:main"
+corgisim-gui-run = "corgisim_gui.runner:main"
+
+[tool.setuptools.packages.find]
+include = ["corgisim_gui*"]
+
+[tool.setuptools.package-data]
+corgisim_gui = ["themes/*.toml", "themes/*.qss", "themes/*.j2", "fonts/*.ttf", "fonts/*.otf", "fonts/LICENSE*", "data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
