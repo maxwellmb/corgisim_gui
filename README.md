@@ -19,8 +19,12 @@ Planned tools (see the plan in `docs/plan.md`):
 
 ## Status
 
-Phase 0 (environment) and phase 1 (the Qt-free core, the engine and the runner) are done. There is
-no window yet. What works today:
+Phases 0 (environment), 1 (the Qt-free core, the engine and the runner) and 2 (the Setup View) are
+done. `corgisim-gui` (or `python -m corgisim_gui.app [job.json|cpgs.xml]`) opens the Setup View:
+
+![Setup View](docs/screenshots/roman_setup.png)
+
+What else works today:
 
     conda activate corgisim_gui
     python -m corgisim_gui.runner job.json --validate-only
@@ -47,6 +51,6 @@ the conda env `corgisim_gui`. Then:
     corgisim_gui/engine/    builds corgisim objects from a Job and runs it (stepwise loop or corgisim's own)
     corgisim_gui/runner.py  python -u -m corgisim_gui.runner job.json
     corgisim_gui/backend/   file-system and process access behind one interface
-    corgisim_gui/ui/        windows and widgets (phase 2+)
+    corgisim_gui/ui/        setup_view (strip, field view, window), glyphs, imaging, base.ThemedWindow, widgets/
     corgisim_gui/themes/    theme token files and the stylesheet template (copied from corgidrp_gui)
     tests/

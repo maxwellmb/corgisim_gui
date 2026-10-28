@@ -28,7 +28,10 @@ coordination between the two repos).
     corgisim_gui/engine/    stepwise.py: corgisim objects from a Job; PSF states, frames, spawn pool, L1 files
     corgisim_gui/runner.py  CLI entry point used by the console
     corgisim_gui/backend/   file-system and process access behind one interface
-    corgisim_gui/ui/        windows (phase 2+), base.ThemedWindow, widgets/
+    corgisim_gui/ui/        setup_view.py (OpticalTrainStrip, FieldView, SetupView, SetupWindow), glyphs.py (QPainter
+                            element glyphs), imaging.py (numpy -> QImage stretches/colour maps), base.ThemedWindow, widgets/
+    corgisim_gui/app.py     make_app + CLI (opens the Setup View until the launcher exists)
+    tools/render_setup_view.py   offscreen screenshots per theme (--all for the pol/spec examples)
     corgisim_gui/themes/ fonts/ theming.py   copied from corgidrp_gui; roles: QPushButton[role="primary"], QLabel[role="section"], ...
     tests/                  core tests run without corgisim; *_vs_corgisim / cpgs loader / engine tests need it
 
@@ -40,6 +43,12 @@ coordination between the two repos).
 compare the static tables and the CPGS translation with the installed corgisim/cgisim: after a
 corgisim upgrade, run them first and fix `core/tables.py` / `core/cpgs.py` to match.
 
+## Setup View conventions
+- `SetupView.set_job(job)` validates, fills the strip for the selected visit (DPAM/roll/gain from the visit), renders
+  the field with `core.field.render_field` and the facts panel. Windows embed `SetupView` and call `set_job` on edits.
+- Glyph painters take a `colors` dict from `setup_view._colors(theme)`; field overlays use theme roles
+  (action = dark hole, secondary = stops/slits, warn = pol beams, ok = sources).
+
 ## Phases
-0 environment · 1 core + engine + runner (done 2026-10-28) · 2 Setup View widget · 3 Image Lab window ·
+0 environment · 1 core + engine + runner · 2 Setup View (all done 2026-10-28) · 3 Image Lab window ·
 4 Sequence Builder · 5 Sim Console + queue · 6 docs, launcher, packaging.
