@@ -31,13 +31,27 @@ Console, on top of the Qt-free core, the stepwise engine and the runner. See the
 
 ## Install
 
-The environment needs corgisim and its dependencies (PROPER, cgisim, roman_preflight_proper,
-cgi-eetc, emccd_detect >= 2.6.2, corgidrp) plus PySide6, qtpy, jinja2. On the development Mac that is
-the conda env `corgisim_gui`. Then:
+Start from a Python 3.12 environment in which corgisim imports, installed as corgisim's README
+describes (PROPER, roman_preflight_proper, cgi-eetc, cgisim 4.1, emccd_detect >= 2.6.2, corgidrp,
+then corgisim itself). Then, in that environment:
 
+    git clone git@github.com:maxwellmb/corgisim_gui.git
+    cd corgisim_gui
     pip install -e ".[dev]"
-    python -m pytest -q --deselect tests/test_engine.py     # fast tests
-    python -m pytest -q                                      # also simulates a tiny job (about 2 min)
+    corgisim-gui
+
+The GUI needs PySide6, qtpy and jinja2 on top of corgisim's dependencies; pip installs them.
+Tests:
+
+    python -m pytest -q --deselect tests/test_engine.py --deselect tests/test_gui_runs.py   # seconds
+    python -m pytest -q                                      # also simulates tiny jobs with real PSFs (a few minutes)
+
+The tests that compare the GUI's tables and CPGS translation with corgisim, and the ones that
+simulate, are skipped when corgisim is not importable. The CPGS tests use the sample files in
+corgisim's own `test/test_data` folder, found through the installed package.
+
+Simulations write to the output folder you choose; job files written by the GUI and the queue
+state live in `~/.corgisim_gui` (override with the `CORGISIM_GUI_HOME` environment variable).
 
 ## Layout
 

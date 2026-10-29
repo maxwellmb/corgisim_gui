@@ -7,9 +7,10 @@ coordination between the two repos).
 ## Hard rules
 - **Never modify `../corgisim`** (or cgisim, proper, roman_preflight_proper). This package only
   imports them. No monkeypatching: progress comes from the runner's own marker lines.
-- Python for everything: `/opt/anaconda3/envs/corgisim_gui/bin/python` (corgisim, cgisim, proper via
-  a `.pth` file pointing at `../proper`, roman_preflight_proper 2.0.2, emccd_detect 2.6.2, corgidrp
-  5.1.1 editable, PySide6, qtpy, pytest). `corgi_env` is Max's older env and cannot run corgisim main.
+- Run everything with the Python of an environment where corgisim main imports (corgisim, cgisim, proper,
+  roman_preflight_proper >= 2.0.2, emccd_detect >= 2.6.2, corgidrp, PySide6, qtpy, pytest). On the original
+  development Mac that is the conda env `corgisim_gui`; older corgisim environments with emccd_detect < 2.6.2
+  cannot run corgisim main.
 - Qt code imports through `qtpy`. `corgisim_gui/core/` and `corgisim_gui/engine/` stay Qt-free.
   `core/` never imports corgisim (so the GUI draws and validates without it); `engine/` imports it
   inside functions.
@@ -36,8 +37,8 @@ coordination between the two repos).
     tests/                  core tests run without corgisim; *_vs_corgisim / cpgs loader / engine tests need it
 
 ## Tests
-    /opt/anaconda3/envs/corgisim_gui/bin/python -m pytest -q            # ~2 min, runs real PSFs in test_engine.py
-    /opt/anaconda3/envs/corgisim_gui/bin/python -m pytest -q --deselect tests/test_engine.py   # seconds
+    python -m pytest -q                                                                        # minutes, runs real PSFs
+    python -m pytest -q --deselect tests/test_engine.py --deselect tests/test_gui_runs.py       # seconds
 
 `tests/test_tables_vs_corgisim.py` and `tests/test_cpgs.py::test_translation_matches_corgisim_loader`
 compare the static tables and the CPGS translation with the installed corgisim/cgisim: after a

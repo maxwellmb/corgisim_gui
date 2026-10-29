@@ -8,7 +8,7 @@
   CPGS translation against the real install.
 - Simulations run in a subprocess (`corgisim_gui.runner`), never in the GUI process: PROPER
   spawns its own pool, corgisim objects are not thread-safe, and the user can abort.
-- Python for everything: `/opt/anaconda3/envs/corgisim_gui/bin/python` on the development Mac.
+- Run everything with the Python of an environment where corgisim imports (the README's install steps).
 
 ## Layout
 

@@ -26,7 +26,7 @@ from .model import Job, Visit
 
 @dataclass
 class Calibration:
-    """Seconds per unit of work, measured on the development Mac (Apple silicon, 8 cores, 2026-10-28).
+    """Seconds per unit of work, measured on an 8-core Apple-silicon Mac (2026-10-28).
 
     A band-1 host PSF (7 wavelengths run in parallel by PROPER) took 90 s at
     oversampling 7 and 39 s at oversampling 3; each companion the same again;

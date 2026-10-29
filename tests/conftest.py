@@ -8,8 +8,26 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-CORGISIM_ROOT = os.path.join(os.path.dirname(ROOT), "corgisim")
-CPGS_DIR = os.path.join(CORGISIM_ROOT, "test", "test_data")
+
+
+def _cpgs_dir() -> str | None:
+    """corgisim's sample CPGS files: test/test_data next to the installed package (an editable checkout)."""
+    try:
+        import corgisim
+        pkg = corgisim.lib_dir if hasattr(corgisim, "lib_dir") else list(corgisim.__path__)[0]
+    except Exception:  # noqa: BLE001
+        pkg = None
+    candidates = []
+    if pkg:
+        candidates.append(os.path.join(os.path.dirname(os.path.abspath(pkg)), "test", "test_data"))
+    candidates.append(os.path.join(os.path.dirname(ROOT), "corgisim", "test", "test_data"))
+    for c in candidates:
+        if os.path.isdir(c):
+            return c
+    return None
+
+
+CPGS_DIR = _cpgs_dir()
 
 
 def corgisim_available() -> bool:
@@ -28,7 +46,7 @@ needs_corgisim = pytest.mark.skipif(not corgisim_available(), reason="corgisim/c
 @pytest.fixture(scope="session")
 def cpgs_files() -> list[str]:
     import glob
-    files = sorted(glob.glob(os.path.join(CPGS_DIR, "cpgs_*.xml")))
+    files = sorted(glob.glob(os.path.join(CPGS_DIR, "cpgs_*.xml"))) if CPGS_DIR else []
     if not files:
         pytest.skip("corgisim sample CPGS files not found")
     return files

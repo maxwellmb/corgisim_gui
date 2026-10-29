@@ -1,7 +1,7 @@
 # corgisim_gui plan (agreed 2026-10-28)
 
 ## Decisions
-- New conda environment `corgisim_gui` (corgi_env stays as it is).
+- A fresh conda environment for corgisim main plus the GUI dependencies.
 - Own copy of the theme engine, widgets and fonts (no shared package with corgidrp_gui).
 - Build against corgisim **main**; keep the upgrade to PR 300 (parallel frame generation) in mind.
 - Separate `corgisim-gui` launcher; cross-links to corgidrp_gui later.

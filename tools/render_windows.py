@@ -20,7 +20,9 @@ from corgisim_gui.ui.launcher import LauncherWindow  # noqa: E402
 from corgisim_gui.ui.sequence_window import SequenceWindow  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CPGS = os.path.join(os.path.dirname(ROOT), "corgisim", "test", "test_data", "cpgs_ref_pol_satspots.xml")
+sys.path.insert(0, os.path.join(ROOT, "tests"))
+from conftest import CPGS_DIR  # noqa: E402
+CPGS = os.path.join(CPGS_DIR, "cpgs_ref_pol_satspots.xml") if CPGS_DIR else ""
 app = make_app([], restore=False)
 out = os.path.join(ROOT, "docs", "screenshots")
 os.makedirs(out, exist_ok=True)
