@@ -668,10 +668,11 @@ class SetupView(QtWidgets.QWidget):
         self.cost_label.setWordWrap(True)
         facts_panel.layout().addWidget(self.cost_label)
         facts_panel.layout().addWidget(SectionLabel("Checks"))
-        self.issues_box = QtWidgets.QVBoxLayout()
-        self.issues_box.setSpacing(3)
-        facts_panel.layout().addLayout(self.issues_box)
+        self.issues_host = QtWidgets.QWidget()
+        QtWidgets.QVBoxLayout(self.issues_host).setContentsMargins(0, 0, 0, 0)
+        facts_panel.layout().addWidget(self.issues_host)
         facts_panel.layout().addStretch(1)
+        self._facts_panel = facts_panel
         scroll = QtWidgets.QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
@@ -771,23 +772,36 @@ class SetupView(QtWidgets.QWidget):
         self.cost_label.setText(f"{est.psf_states} PSF states, {est.propagations} propagations, {est.frames + est.satspot_frames} frames; "
                                 f"about {est.pretty_time} on this machine, {est.memory_gb:.0f} GB with {self._job.run.n_jobs} parallel frame(s)."
                                 + ("\n" + "\n".join(est.notes) if est.notes else ""))
-        # issues
-        while self.issues_box.count():
-            item = self.issues_box.takeAt(0)
-            if item.widget():
-                item.widget().deleteLater()
+        # issues: rebuild the whole container so nothing is left floating in the panel
+        old_host = self.issues_host
+        host = QtWidgets.QWidget()
+        box = QtWidgets.QVBoxLayout(host)
+        box.setContentsMargins(0, 0, 0, 0)
+        box.setSpacing(3)
         if not self._issues:
-            self.issues_box.addWidget(Chip("no problems found", "ok"))
+            row = QtWidgets.QHBoxLayout()
+            row.addWidget(Chip("no problems found", "ok"))
+            row.addStretch(1)
+            box.addLayout(row)
         for iss in self._issues[:12]:
             row = QtWidgets.QHBoxLayout()
             row.setSpacing(6)
-            row.addWidget(Chip(iss.level, {"error": "err", "warn": "warn", "info": "dim"}[iss.level]))
+            row.addWidget(Chip(iss.level, {"error": "err", "warn": "warn", "info": "dim"}[iss.level]), 0, QtCore.Qt.AlignmentFlag.AlignTop)
             lab = QtWidgets.QLabel(f"{iss.field}: {iss.message}")
             lab.setWordWrap(True)
             row.addWidget(lab, 1)
-            self.issues_box.addLayout(row)
+            box.addLayout(row)
         if len(self._issues) > 12:
-            self.issues_box.addWidget(QtWidgets.QLabel(f"... and {len(self._issues) - 12} more"))
+            box.addWidget(QtWidgets.QLabel(f"... and {len(self._issues) - 12} more"))
+        lay = self._facts_panel.layout()
+        idx = lay.indexOf(old_host)
+        lay.removeWidget(old_host)
+        old_host.hide()
+        old_host.setParent(None)
+        old_host.deleteLater()
+        lay.insertWidget(idx, host)
+        self.issues_host = host
+        theming.decorate_tree(host)
 
     def theme_changed(self, theme=None) -> None:
         self.field.set_display()

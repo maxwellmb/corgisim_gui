@@ -1,6 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.1.0 — 2026-10-28
+
+- Phases 3-6: Image Lab (forms for scene, instrument, detector, exposure and output; live Setup
+  View; Preview and Simulate through the runner subprocess; Result viewer), Sequence Builder
+  (editable visits table, templates, CPGS import with notes, per-visit Setup View and cost),
+  Sim Console (persistent queue, one runner per job, progress per visit and frame, latest-frame
+  view, log and traceback, hand-offs, corgidrp_gui hook), Launcher (tiles, environment check in a
+  subprocess, theme), `corgisim-gui` CLI, user guide and developer notes, screenshots per theme.
 
 - Phase 2: Setup View. An optical-train strip (DMs, SPAM, FPAM, LSAM, FSAM, CFAM, DPAM, EXCAM with
   schematic glyphs, the header element names and validation status per cell), a field-of-view

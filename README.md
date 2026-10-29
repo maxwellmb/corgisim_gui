@@ -3,7 +3,7 @@
 A desktop GUI wrapper around [corgisim](https://github.com/roman-corgi/corgisim), the Roman
 Coronagraph Instrument simulator. It does not modify corgisim; it imports it.
 
-Planned tools (see the plan in `docs/plan.md`):
+Tools (the plan is in `docs/plan.md`):
 
 - **Image Lab** - set up a scene (host star, companions, disk), the instrument (coronagraph, filter,
   DPAM element, slit, ND, DMs, satellite spots, jitter) and the detector, preview the noiseless
@@ -19,21 +19,15 @@ Planned tools (see the plan in `docs/plan.md`):
 
 ## Status
 
-Phases 0 (environment), 1 (the Qt-free core, the engine and the runner) and 2 (the Setup View) are
-done. `corgisim-gui` (or `python -m corgisim_gui.app [job.json|cpgs.xml]`) opens the Setup View:
-
-![Setup View](docs/screenshots/roman_setup.png)
-
-What else works today:
+All six phases are built (2026-10-28): launcher, Image Lab, Sequence Builder, Setup View and Sim
+Console, on top of the Qt-free core, the stepwise engine and the runner. See the
+[user guide](docs/user_guide.md) and the [developer notes](docs/developing.md).
 
     conda activate corgisim_gui
-    python -m corgisim_gui.runner job.json --validate-only
-    python -m corgisim_gui.runner job.json --n-jobs 2 --seed 7
-    python -m corgisim_gui.runner job.json --preview        # noiseless scene only
+    corgisim-gui                         # launcher; --tool imagelab|sequence|setup|console, --job, --cpgs, --queue
+    python -m corgisim_gui.runner job.json --n-jobs 2 --seed 7     # the same run without the GUI
 
-A job file is the JSON of `corgisim_gui.core.model.Job` (`Job().save(path)` writes a template).
-`corgisim_gui.core.cpgs.load_job_from_cpgs(xml)` builds one from a CPGS file the way corgisim's own
-loader would, and records in `job.notes` where the file says something corgisim ignores.
+![Image Lab](docs/screenshots/roman_imagelab.png)
 
 ## Install
 
@@ -51,6 +45,7 @@ the conda env `corgisim_gui`. Then:
     corgisim_gui/engine/    builds corgisim objects from a Job and runs it (stepwise loop or corgisim's own)
     corgisim_gui/runner.py  python -u -m corgisim_gui.runner job.json
     corgisim_gui/backend/   file-system and process access behind one interface
-    corgisim_gui/ui/        setup_view (strip, field view, window), glyphs, imaging, base.ThemedWindow, widgets/
+    corgisim_gui/ui/        launcher, imagelab_window, sequence_window, console_window, setup_view, forms, image_view,
+                            runner_process, glyphs, imaging, dialogs, base.ThemedWindow, widgets/
     corgisim_gui/themes/    theme token files and the stylesheet template (copied from corgidrp_gui)
     tests/

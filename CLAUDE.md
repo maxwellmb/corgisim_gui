@@ -49,6 +49,14 @@ corgisim upgrade, run them first and fix `core/tables.py` / `core/cpgs.py` to ma
 - Glyph painters take a `colors` dict from `setup_view._colors(theme)`; field overlays use theme roles
   (action = dark hole, secondary = stops/slits, warn = pol beams, ok = sources).
 
+## Windows
+- Forms (`ui/forms.py`) have `load(spec)` / `apply(spec)` / `changed`; windows debounce `changed` and call
+  `SetupView.set_job`. Hand-offs are plain callables set by `app.ToolWindows` (`queue_handler`, `sequence_handler`,
+  `imagelab_handler`) plus Qt signals.
+- Never call a modal `exec()` from code a test can reach (offscreen tests block forever); use `open()`.
+- Slow things (importing corgisim, running) go in subprocesses: `RunnerProcess`, `corgisim_gui.envcheck`.
+- Screenshots: `tools/render_all.py` (windows + Setup View, every theme).
+
 ## Phases
-0 environment · 1 core + engine + runner · 2 Setup View (all done 2026-10-28) · 3 Image Lab window ·
-4 Sequence Builder · 5 Sim Console + queue · 6 docs, launcher, packaging.
+0 environment · 1 core + engine + runner · 2 Setup View · 3 Image Lab · 4 Sequence Builder · 5 Sim Console ·
+6 launcher, CLI, docs — all done 2026-10-28. Next: real-use shakedown, the PR 300 upgrade, figure-panel glyphs.
